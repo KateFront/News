@@ -69,3 +69,76 @@ const renderNews = (categoryId) => {
         });
 
 }
+
+const App = () => {
+    return (
+        <React.Fragment>
+            <header className="header">
+                <div className="container">
+                    <nav className="navigation grid header__navigation">
+                        <a href="./index.html" className="navigation__logo">
+                            <img className="navigation__image" src="./images/logo.svg" alt="Логотип"/>
+                        </a>
+                        <ul className="navigation__list">
+                            <li className="navigation__item"><a href="./index.html"
+                                                                className="navigation__link navigation__link--active">Главная</a>
+                            </li>
+                            <li className="navigation__item"><a href="./fashion.html"
+                                                                className="navigation__link">Мода</a></li>
+                            <li className="navigation__item"><a href="./tech.html"
+                                                                className="navigation__link">Технологии</a></li>
+                            <li className="navigation__item"><a href="./politics.html"
+                                                                className="navigation__link">Политика</a></li>
+                            <li className="navigation__item"><a href="./sport.html"
+                                                                className="navigation__link">Спорт</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
+
+            <main className="main">
+                <section className="articles">
+                    <div className="container grid">
+                        <section className="articles__big-column">
+                        </section>
+
+                        <section className="articles__small-column">
+                        </section>
+                    </div>
+                </section>
+            </main>
+
+            <footer className="footer">
+                <div className="container">
+                    <nav className="navigation grid footer__navigation">
+                        <a href="#" className="navigation__logo"><img className="navigation__image"
+                                                                      src="./images/logo.svg"
+                                                                      alt="Логотип"/></a>
+                        <ul className="navigation__list">
+                            <li className="navigation__item"><a href="./index.html"
+                                                                className="navigation__link navigation__link--active">Главная</a>
+                            </li>
+                            <li className="navigation__item"><a href="./fashion.html"
+                                                                className="navigation__link">Мода</a></li>
+                            <li className="navigation__item"><a href="./tech.html"
+                                                                className="navigation__link">Технологии</a></li>
+                            <li className="navigation__item"><a href="./politics.html"
+                                                                className="navigation__link">Политика</a></li>
+                            <li className="navigation__item"><a href="./sport.html"
+                                                                className="navigation__link">Спорт</a></li>
+                        </ul>
+                    </nav>
+
+                    <div className="footer__column">
+                        <p className="footer__text">Сделано на Frontend курсе в <a
+                            href="https://karpov.courses/frontend"
+                            target="_blank"
+                            className="footer__link">Karpov.Courses</a></p>
+                        <p className="footer__copyright">© 2021</p>
+                    </div>
+                </div>
+            </footer>
+        </React.Fragment>
+)
+}
+ReactDOM.render(<App/>, document.getElementById('root'));
