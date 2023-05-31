@@ -3,7 +3,7 @@ import MainArticle from "../MainArticle/MainArticle.js";
 import SmallArticle from "../SmallArticle/SmallArticle.js";
 import './Articles.css';
 
-const Articles = ({articles}) => {
+const Articles = ({articles, onArticleClick}) => {
     return (
         <main className="main">
             <section className="articles">
@@ -17,7 +17,9 @@ const Articles = ({articles}) => {
                                     image={item.image}
                                     title={item.title}
                                     category={articles.categories.find(({id}) => item.category_id === id).name}
-                                    source={articles.sources.find(({id}) => item.source_id === id).name}/>
+                                    source={articles.sources.find(({id}) => item.source_id === id).name}
+                                    onClick={() => onArticleClick(item.id)}
+                                />
                             )
                         })}
                     </section>
@@ -29,6 +31,7 @@ const Articles = ({articles}) => {
                                     title={item.title}
                                     source={articles.sources.find(({id}) => item.source_id === id).name}
                                     date={item.date}
+                                    onClick={() => onArticleClick(item.id)}
                                 />
                             )
                         })}
