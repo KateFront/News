@@ -6,10 +6,9 @@ import { NewsAPI } from '../../types';
 
 interface Props {
   articles: NewsAPI;
-  onArticleClick: (id: number) => void;
 }
 
-const Articles: FC<Props> = ({ articles, onArticleClick }) => {
+const Articles: FC<Props> = ({ articles }) => {
   return (
     <main className="main">
       <section className="articles">
@@ -26,7 +25,6 @@ const Articles: FC<Props> = ({ articles, onArticleClick }) => {
                   title={item.title}
                   category={category ? category.name : ''}
                   source={source?.name || ''}
-                  onClick={() => onArticleClick(item.id)}
                 />
               );
             })}
@@ -34,15 +32,7 @@ const Articles: FC<Props> = ({ articles, onArticleClick }) => {
           <section className="articles__small-column">
             {articles.items.slice(3, 12).map((item) => {
               const source = articles.sources.find(({ id }) => item.source_id === id);
-              return (
-                <SmallArticle
-                  key={item.title}
-                  title={item.title}
-                  source={source?.name || ''}
-                  date={item.date}
-                  onClick={() => onArticleClick(item.id)}
-                />
-              );
+              return <SmallArticle key={item.title} title={item.title} source={source?.name || ''} date={item.date} />;
             })}
           </section>
         </div>

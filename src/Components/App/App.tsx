@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Articles from '../Articles/Articles';
 import Navigation from '../Navigation/Navigation';
 import { categoryIds } from '../../utils';
@@ -34,7 +35,7 @@ const App = () => {
   }, [category]);
 
   return (
-    <React.Fragment>
+    <BrowserRouter>
       <header className="header">
         <div className="container">
           <Navigation
@@ -47,16 +48,22 @@ const App = () => {
       </header>
 
       <main>
-        {articleId !== null ? (
-          <ArticleItem
-            id={articleId}
-            categories={articles.categories}
-            sources={articles.sources}
-            onArticleClick={onArticleClick}
+        <Routes>
+          <Route path="/" element={<Articles articles={articles} />} />
+          <Route
+            path="/article"
+            element={
+              articleId !== null ? (
+                <ArticleItem
+                  id={articleId}
+                  categories={articles.categories}
+                  sources={articles.sources}
+                  onArticleClick={onArticleClick}
+                />
+              ) : null
+            }
           />
-        ) : (
-          <Articles articles={articles} onArticleClick={onArticleClick} />
-        )}
+        </Routes>
       </main>
 
       <footer className="footer">
@@ -79,7 +86,8 @@ const App = () => {
           </div>
         </div>
       </footer>
-    </React.Fragment>
+    </BrowserRouter>
   );
 };
+
 export default App;
