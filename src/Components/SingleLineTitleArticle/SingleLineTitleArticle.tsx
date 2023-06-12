@@ -1,14 +1,23 @@
-import React from "react";
+import React, { FC } from 'react';
 import './SingleLineTitleArticle.css';
 
-export const SingleLineTitleArticle = () => {
-    return (
-        <article className="single-line-title-article">
-            <img className="single-line-title-article__image" src="http://placeimg.com/500/700/any"  alt={' '}/>
-            <span className="article-category single-line-title-article__category">Мода</span>
-            <h2 className="single-line-title-article__title">Заголовок в одну строчку здесь Заголовок в одну строчку здесь</h2>
-            <p className="single-line-title-article__text">А вот текст этой новости, в котором что-то интересное поясняется и есть хитрая фраза, заставляющая открыть</p>
-            <span className="article-source single-line-title-article__source">Источник</span>
-        </article>
-    );
+interface Props {
+  image: string;
+  category: string;
+  title: string;
+  source: string;
+  text: string;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
+}
+
+export const SingleLineTitleArticle: FC<Props> = ({ image, title, source, text, category, onClick }) => {
+  return (
+    <article className="single-line-title-article" onClick={onClick}>
+      <img className="single-line-title-article__image" src={image} alt={' '} />
+      <span className="article-category single-line-title-article__category">{category}</span>
+      <h2 className="single-line-title-article__title">{title}</h2>
+      <p className="single-line-title-article__text">{text} </p>
+      <span className="article-source single-line-title-article__source">{source}</span>
+    </article>
+  );
 };
