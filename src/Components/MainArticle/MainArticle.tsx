@@ -8,11 +8,12 @@ interface Props {
   category: string;
   description: string;
   source: string;
+  id: number;
 }
 
-const MainArticle: FC<Props> = ({ title, image, category, description, source }) => {
+const MainArticle: FC<Props> = ({ title, image, category, description, source, id }) => {
   return (
-    <Link to={'/article'} className="main-article">
+    <Link to={`article/${id}`} className="main-article">
       <article className="main-article__container">
         <div className="main-article__image-container">
           <img className="article-img main-article__img" src={image} alt="Фото новости" />

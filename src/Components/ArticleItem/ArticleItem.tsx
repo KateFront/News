@@ -4,33 +4,51 @@ import { SingleLineTitleArticle } from '../SingleLineTitleArticle/SingleLineTitl
 import { Article, ArticleItemAPI, Category, RelatedArticlesAPI, Source } from '../../types';
 import './ArticleItem.css';
 import { beautifyDate } from '../../utils';
+import { useParams } from 'react-router-dom';
+import ArticleItemInfo from '../ArticleItemInfo/ArticleItemInfo';
 
-interface Props {
-  id: number;
-  categories: Category[];
-  sources: Source[];
-  onArticleClick: (id: number) => void;
-}
+export const ArticleItem: FC = () => {
+  const { id } = useParams<{ id: string }>();
 
-export const ArticleItem: FC<Props> = ({ id, sources, categories, onArticleClick }) => {
   const [articleItem, setArticleItem] = React.useState<ArticleItemAPI | null>(null);
   const [relatedArticles, setRelatedArticles] = React.useState<Article[] | null>(null);
+  const [categories, setCategories] = React.useState<Category[]>([]);
+  const [sources, setSources] = React.useState<Source[]>([]);
 
   React.useEffect(() => {
     fetch(`https://frontend.karpovcourses.net/api/v2/news/full/${id}`)
       .then((response) => response.json())
       .then(setArticleItem);
-    fetch(`https://frontend.karpovcourses.net/api/v2/news/related/${id}?count=9`)
-      .then((response) => response.json())
-      .then((response: RelatedArticlesAPI) => {
-        setRelatedArticles(response.items);
-      });
+
+    Promise.all([
+      fetch(`https://frontend.karpovcourses.net/api/v2/news/related/${id}?count=9`).then((response) => response.json()),
+      fetch('https://frontend.karpovcourses.net/api/v2/categories').then((response) => response.json()),
+      fetch('https://frontend.karpovcourses.net/api/v2/sources').then((response) => response.json()),
+    ]).then((response) => {
+      const articles: RelatedArticlesAPI = response[0];
+      const categories: Category[] = response[1];
+      const sources: Source[] = response[2];
+      setRelatedArticles(articles.items);
+      setCategories(categories);
+      setSources(sources);
+    });
   }, [id]);
 
   if (articleItem === null || relatedArticles === null) {
     return null;
   }
 
+  const renderArticleItemInfo = (articleItem: ArticleItemAPI): React.ReactElement => {
+    return (
+      <ArticleItemInfo
+        date={beautifyDate(articleItem.date)}
+        categoryName={articleItem.category.name}
+        author={articleItem?.author ?? ''}
+        sourceLink={articleItem.link}
+        sourceName={articleItem.source?.name ?? ''}
+      />
+    );
+  };
   return (
     <section className="article-page">
       <article className="article">
@@ -41,10 +59,7 @@ export const ArticleItem: FC<Props> = ({ id, sources, categories, onArticleClick
                 <h1 className="article__hero-title">{articleItem.title}</h1>
               </div>
 
-              <div className="grid">
-                <span className="article-category article__category">{articleItem.category.name}</span>
-                <span className="article-date article__date">{beautifyDate(articleItem.date)}</span>
-              </div>
+              {renderArticleItemInfo(articleItem)}
             </div>
           </section>
         ) : null}
@@ -55,21 +70,10 @@ export const ArticleItem: FC<Props> = ({ id, sources, categories, onArticleClick
               <div className="article__title-container">
                 <h1 className="article__title">{articleItem.title}</h1>
 
-                <div className="grid">
-                  <span className="article-category article__category">{articleItem.category.name}</span>
-                  <span className="article-date article__date">{beautifyDate(articleItem.date)}</span>
-                </div>
+                {renderArticleItemInfo(articleItem)}
               </div>
             )}
-
             <p>{articleItem.text}</p>
-            {/*<p>Наши баскетболистки прекрасно шли по дистанции, но в решающий момент сплоховали.</p>
-                        <img src="http://placeimg.com/1000/500/any"/>
-                        <p>Победа США получилась слишком лёгкой. Американки с самого начала захватили инициативу и не
-                            давали России ни малейшего шанса совершить камбэк. Появилась хоть призрачная надежда на
-                            спасение, но американки сразу же попали из-за дуги и фактически сняли все вопросы — шансов
-                            отыграться при 12:17 не было.</p>
-                        <img src="http://placeimg.com/1000/500/any"/>*/}
           </div>
 
           <div className="article__small-column">
@@ -79,11 +83,11 @@ export const ArticleItem: FC<Props> = ({ id, sources, categories, onArticleClick
               return (
                 <RelatedSmallArticle
                   key={item.id}
+                  id={item.id}
                   title={item.title}
                   source={source?.name || ''}
                   category={category?.name || ''}
                   image={item.image}
-                  onClick={() => onArticleClick(item.id)}
                 />
               );
             })}
@@ -102,12 +106,12 @@ export const ArticleItem: FC<Props> = ({ id, sources, categories, onArticleClick
               return (
                 <SingleLineTitleArticle
                   key={item.id}
+                  id={item.id}
                   title={item.title}
                   source={source?.name || ''}
                   category={category?.name || ''}
                   image={item.image}
                   text={item.description}
-                  onClick={() => onArticleClick(item.id)}
                 />
               );
             })}
