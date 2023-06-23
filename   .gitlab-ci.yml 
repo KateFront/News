@@ -1,12 +1,27 @@
-image: node:16.14.0
+stages:
+  -test
+  -build
 
-pages:
-    stage: deploy
-	before_script:
-		- npm install
-	script:
+
+code_quality:
+  image: node:16.14.0
+  stages: test
+  before_script:
+    - npm ci
+  script:
+		- npm run eslint
+		- npm run stylelint
+		- npm run prettier-check
+	only:
+		- merge_requests
+
+build:
+ image: node:16.14.0
+  stages: build
+  before_script:
+    - npm ci
+  script:
 		- npm run build
-		- cp -r dist public
-	artifacts:
-		paths:
-		- public
+	only:
+		- merge_requests
+
