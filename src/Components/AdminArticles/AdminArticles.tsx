@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -8,8 +8,18 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
+import { IPartnerArticle } from '@components/AdminArticlesItem/types';
+import { getPartnersArticles } from '../../api';
 
 const AdminArticles: FC = () => {
+  const [articles, setArticles] = useState<IPartnerArticle[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const articles = await getPartnersArticles();
+      setArticles(articles);
+    })();
+  }, []);
   return (
     <>
       <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -30,19 +40,18 @@ const AdminArticles: FC = () => {
       </Grid>
 
       <Grid container spacing={2}>
-        {[1, 2, 3, 4].map((item) => (
-          <Grid item xs={4} key={item}>
+        {articles.map((item) => (
+          <Grid item xs={4} key={item.id}>
             <Card>
-              <Link to={`/admin/edit/${item}`}>
+              <Link to={`/admin/edit/${item.id}`}>
                 <CardActionArea>
-                  <CardMedia component="img" height="140" image="https://placeimg.com/640/480/any" alt="green iguana" />
+                  <CardMedia component="img" height="140" image={item.image} alt={item.title} />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                      Lizard
+                      {item.title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all
-                      continents except Antarctica
+                      {item.description}
                     </Typography>
                   </CardContent>
                 </CardActionArea>

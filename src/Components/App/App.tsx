@@ -3,9 +3,11 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Articles from '../Articles/Articles';
 import { ArticleItem } from '../ArticleItem/ArticleItem';
 import Page from '../Page/Page';
-import AdminArticles from '../AdminArticlesItem/AdminArticles';
+import AdminArticles from '../AdminArticles/AdminArticles';
+import AdminArticlesItem from '../AdminArticlesItem/AdminArticlesItem';
+import PrivateRoute from '../PrivateRoute/PrivateRoute';
 import AdminPage from '../AdminPage/AdminPage';
-import AdminArticlesItem from '../AdminArticles/AdminArticlesItem';
+import LoginContainer from '../../features/auth/login/LoginContainer';
 
 const App: FC = () => {
   const { pathname } = useLocation();
@@ -17,29 +19,41 @@ const App: FC = () => {
   return (
     <Routes>
       <Route
-        path="/admin"
+        path={'/login'}
         element={
-          <AdminPage>
-            <AdminArticles />
-          </AdminPage>
+          <Page>
+            <LoginContainer />
+          </Page>
         }
       />
-      <Route
-        path="/admin/create"
-        element={
-          <AdminPage>
-            <AdminArticlesItem />
-          </AdminPage>
-        }
-      />
-      <Route
-        path="/admin/edit/:id"
-        element={
-          <AdminPage>
-            <AdminArticlesItem />
-          </AdminPage>
-        }
-      />
+      <Route path={'/'} element={<PrivateRoute />}>
+        {/*specify public routes here*/}
+        <Route
+          path={'/admin'}
+          element={
+            <AdminPage>
+              <AdminArticles />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/create"
+          element={
+            <AdminPage>
+              <AdminArticlesItem />
+            </AdminPage>
+          }
+        />
+        <Route
+          path="/admin/edit/:id"
+          element={
+            <AdminPage>
+              <AdminArticlesItem />
+            </AdminPage>
+          }
+        />
+      </Route>
+      {/*specify public routes here*/}
       <Route
         path="/"
         element={
@@ -49,6 +63,7 @@ const App: FC = () => {
         }
         errorElement={<div>Not Found</div>}
       />
+
       <Route
         path="/article/:id"
         element={

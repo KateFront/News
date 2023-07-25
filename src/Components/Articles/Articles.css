@@ -2,10 +2,18 @@
   margin-bottom: 135px;
 }
 
-.articles__big-column {
-  grid-column: span 9;
+.articles__hero {
+  margin-bottom: 32px;
 }
 
-.articles__small-column {
-  grid-column: 10/-1;
+.articles__content {
+  grid-column: span 7;
+}
+
+.articles__sidebar {
+  grid-column: 9/-1;
+}
+
+.articles__partner-article {
+  margin: 50px 0;
 }
